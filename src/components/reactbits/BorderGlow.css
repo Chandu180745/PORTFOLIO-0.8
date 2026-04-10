@@ -1,0 +1,126 @@
+.border-glow-card {
+  --edge-proximity: 0;
+  --cursor-angle: 45deg;
+  --edge-sensitivity: 30;
+  --color-sensitivity: calc(var(--edge-sensitivity) + 20);
+  --border-radius: 28px;
+  --glow-padding: 40px;
+  --cone-spread: 25;
+
+  position: relative;
+  border-radius: var(--border-radius);
+  isolation: isolate;
+  transform: translate3d(0, 0, 0.01px);
+  display: grid;
+  border: 1px solid rgb(255 255 255 / 15%);
+  background: var(--card-bg, #060010);
+  overflow: visible;
+  box-shadow: 
+    rgba(0, 0, 0, 0.1) 0px 1px 2px,
+    rgba(0, 0, 0, 0.1) 0px 2px 4px,
+    rgba(0, 0, 0, 0.1) 0px 4px 8px,
+    rgba(0, 0, 0, 0.1) 0px 8px 16px,
+    rgba(0, 0, 0, 0.1) 0px 16px 32px;
+}
+
+.border-glow-inner {
+  position: relative;
+  z-index: 2;
+  border-radius: calc(var(--border-radius) - 1px);
+  background: var(--card-bg, #060010);
+  padding: 0;
+  overflow: hidden;
+}
+
+.edge-light {
+  position: absolute;
+  inset: -1px;
+  z-index: 1;
+  pointer-events: none;
+  border-radius: var(--border-radius);
+  opacity: var(--is-hovered, 0);
+  transition: opacity 0.3s ease;
+  background: radial-gradient(
+    var(--glow-padding) circle at var(--glow-x) var(--glow-y),
+    hsla(var(--glow-h), var(--glow-s), var(--glow-l), calc(var(--glow-intensity) * 0.8)),
+    hsla(var(--glow-h), var(--glow-s), var(--glow-l), 0) 80%
+  );
+}
+
+.border-glow-card::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: 0;
+  border-radius: var(--border-radius);
+  opacity: var(--is-hovered, 0);
+  transition: opacity 0.3s ease;
+  padding: 1px;
+  background: conic-gradient(
+    from calc(var(--cursor-angle) - var(--cone-spread) * 1deg) at var(--glow-x) var(--glow-y),
+    transparent 0deg,
+    var(--gradient-one, #38bdf8) calc(var(--cone-spread) * 0.5deg),
+    var(--gradient-two, #c084fc) calc(var(--cone-spread) * 1deg),
+    var(--gradient-three, #f472b6) calc(var(--cone-spread) * 1.5deg),
+    transparent calc(var(--cone-spread) * 2deg)
+  );
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+.border-glow-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: var(--border-radius);
+  opacity: var(--is-hovered, 0);
+  transition: opacity 0.3s ease;
+  background: radial-gradient(
+    var(--glow-padding) circle at var(--glow-x) var(--glow-y),
+    hsla(var(--glow-h), var(--glow-s), var(--glow-l), var(--fill-opacity)),
+    transparent 100%
+  );
+}
+
+@keyframes rotate-glow {
+  from {
+    --cursor-angle: 0deg;
+  }
+  to {
+    --cursor-angle: 360deg;
+  }
+}
+
+.border-glow-card {
+  --is-animated: 0;
+}
+
+.border-glow-card[data-animated="true"]::before {
+  animation: rotate-glow 4s linear infinite;
+}
+
+/* Support for modern CSS variables logic */
+@property --cursor-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@property --glow-x {
+  syntax: '<length>';
+  initial-value: 0px;
+  inherits: false;
+}
+
+@property --glow-y {
+  syntax: '<length>';
+  initial-value: 0px;
+  inherits: false;
+}

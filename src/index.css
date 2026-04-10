@@ -1,0 +1,254 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://api.fontshare.com/v2/css?f[]=general-sans@200,300,400,500,600,700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 98%;
+    --foreground: 220 15% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 15% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 15% 10%;
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 14% 93%;
+    --secondary-foreground: 220 15% 15%;
+    --muted: 220 14% 94%;
+    --muted-foreground: 220 9% 46%;
+    --accent: 220 14% 94%;
+    --accent-foreground: 220 15% 10%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 13% 90%;
+    --input: 220 13% 90%;
+    --ring: 217 91% 60%;
+    --radius: 0.75rem;
+
+    --surface-glass: 0 0% 100% / 0.7;
+    --glow-primary: 217 91% 60%;
+    --gradient-hero: linear-gradient(135deg, hsl(220 15% 96%), hsl(0 0% 100%));
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217 91% 60%;
+  }
+
+  .dark {
+    --background: 0 0% 0%;
+    --foreground: 210 20% 95%;
+    --card: 0 0% 5%;
+    --card-foreground: 210 20% 95%;
+    --popover: 0 0% 5%;
+    --popover-foreground: 210 20% 95%;
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 210 20% 90%;
+    --muted: 0 0% 12%;
+    --muted-foreground: 220 10% 55%;
+    --accent: 222 15% 12%;
+    --accent-foreground: 210 20% 95%;
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 217 91% 60%;
+
+    --surface-glass: 0 0% 5% / 0.5;
+    --glow-primary: 217 91% 60%;
+    --gradient-hero: linear-gradient(135deg, hsl(0 0% 0%), hsl(0 0% 3%));
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+    scrollbar-width: none; /* Firefox */
+  }
+  *::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Edge */
+  }
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  body {
+    @apply bg-background text-foreground font-body antialiased;
+    overflow-x: hidden;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
+  }
+}
+
+@layer components {
+  /* Glass card effect */
+  .glass-card {
+    @apply bg-card/50 backdrop-blur-xl border border-border/40 rounded-2xl;
+  }
+
+  /* Section box — viewport-fitted container */
+  .section-box {
+    @apply w-full max-w-7xl mx-auto rounded-3xl p-4 sm:p-6 md:p-8 lg:p-10 relative overflow-hidden;
+    /* removed border, background, shadow and backdrop-blur */
+    transform-style: preserve-3d;
+  }
+  .section-box::before {
+    content: '';
+    @apply absolute inset-0 rounded-3xl pointer-events-none;
+  }
+  .section-box::after {
+    content: '';
+    @apply absolute inset-0 rounded-3xl pointer-events-none;
+  }
+
+  /* Glow effect on hover */
+  .glow-hover {
+    @apply relative overflow-hidden;
+  }
+  .glow-hover::after {
+    content: '';
+    @apply absolute inset-0 opacity-0 transition-opacity duration-500 rounded-2xl pointer-events-none;
+    background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), hsl(var(--primary) / 0.1), transparent 40%);
+  }
+  .glow-hover:hover::after {
+    @apply opacity-100;
+  }
+
+  /* Section padding */
+  .section-padding {
+    @apply py-24 md:py-32 px-6 md:px-12 lg:px-20;
+  }
+
+  /* Accent underline */
+  .accent-underline {
+    @apply relative inline-block;
+  }
+  .accent-underline::after {
+    content: '';
+    @apply absolute bottom-0 left-0 w-full h-[3px] bg-primary scale-x-0 origin-left transition-transform duration-500;
+  }
+  .accent-underline:hover::after {
+    @apply scale-x-100;
+  }
+
+  /* Scroll-triggered section reveal */
+
+  /* Preloader */
+  .preloader-dot {
+    @apply w-2 h-2 rounded-full bg-primary;
+    animation: preloader-bounce 1.4s infinite ease-in-out both;
+  }
+  .preloader-dot:nth-child(1) { animation-delay: -0.32s; }
+  .preloader-dot:nth-child(2) { animation-delay: -0.16s; }
+
+  /* Smooth input focus */
+  .input-focus {
+    @apply border-border bg-card transition-all duration-300;
+  }
+  .input-focus:focus {
+    @apply border-primary ring-2 ring-primary/20 outline-none;
+  }
+
+  /* Float animation */
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  /* GradualBlur component */
+  .gradual-blur {
+    pointer-events: none;
+  }
+  .gradual-blur-page {
+    position: fixed;
+    z-index: 1100;
+  }
+  .gradual-blur-parent {
+    position: absolute;
+  }
+  .gradual-blur-inner {
+    pointer-events: none;
+  }
+
+  /* Liquid glass effect */
+  .liquid-glass {
+    background: rgba(255, 255, 255, 0.01);
+    background-blend-mode: luminosity;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border: none;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+  }
+  .liquid-glass::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1.4px;
+    background: linear-gradient(180deg,
+      rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.15) 20%,
+      rgba(255,255,255,0) 40%, rgba(255,255,255,0) 60%,
+      rgba(255,255,255,0.15) 80%, rgba(255,255,255,0.45) 100%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+}
+
+@keyframes preloader-bounce {
+  0%, 80%, 100% { transform: scale(0); }
+  40% { transform: scale(1); }
+}
+
+/* Lanyard 3D badge */
+.lanyard-wrapper {
+  position: relative;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: scale(1);
+  transform-origin: center;
+}
+
+@keyframes pulse-glow-white {
+  0%, 100% { 
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.1), inset 0 0 10px rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+  50% { 
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.25), inset 0 0 15px rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+}
+
+.neon-box {
+  @apply relative rounded-[2.5rem] border border-white/10 bg-white/[0.02] backdrop-blur-2xl transition-all duration-700;
+  animation: pulse-glow-white 4s ease-in-out infinite;
+}
+
+.neon-box::before {
+  content: '';
+  @apply absolute -inset-[1px] rounded-[2.5rem] pointer-events-none;
+  background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 40%, rgba(255,255,255,0) 60%, rgba(255,255,255,0.2) 100%);
+  z-index: -1;
+}
